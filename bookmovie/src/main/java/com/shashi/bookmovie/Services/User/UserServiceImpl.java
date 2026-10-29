@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService{
         user.setLast_name(request.lastName());
         user.setPhone_no(request.PhoneNo());
 
-        Roles userRole = rolesService.getRole("ROLE_USER");
+        Roles userRole = rolesService.getRole("ROLE_CUSTOMER");
 
         user.setRoles(List.of(userRole));
 

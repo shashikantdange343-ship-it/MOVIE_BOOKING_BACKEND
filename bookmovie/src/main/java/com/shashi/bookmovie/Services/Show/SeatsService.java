@@ -21,4 +21,7 @@ public interface SeatsService {
 
     BigDecimal handleSeatBookRequest(SeatDTOs.BookSeatsDTO seats);
 
+    void saveAllSeats(List<Seats> seats);
+
 }
+

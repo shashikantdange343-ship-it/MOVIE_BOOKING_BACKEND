@@ -96,5 +96,10 @@ public class SeatServiceImpl implements SeatsService {
         return totalAmount;
     }
 
+    @Override
+    public void saveAllSeats(List<Seats> seats) {
+        seatsRepository.saveAll(seats);
+    }
+
 
 }
