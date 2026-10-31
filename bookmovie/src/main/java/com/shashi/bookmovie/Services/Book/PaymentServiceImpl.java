@@ -150,6 +150,24 @@ public class PaymentServiceImpl implements PaymentService{
 
         Booking booking = payment.getBooking();
 
+        if (booking.getStatus() == Status.FAILED) {
+            System.out.println("Late Payment aayi hai! Seats free ho chuki hain, Initiating Auto-Refund...");
+
+            try {
+                // User ko uske paise wapas bhej do
+                RefundCreateParams params = RefundCreateParams.builder()
+                        .setPaymentIntent(paymentIntent.getId())
+                        .build();
+                Refund.create(params);
+
+                payment.setPaymentStatus(Status.REFUNDED);
+                return bookClassConverter.paymentResponseDTO(paymentRepository.save(payment));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         payment.setPaymentStatus(Status.SUCCESS);
         payment.setPaymentMethod(paymentIntent.getPaymentMethod());
         booking.setStatus(Status.SUCCESS);
