@@ -37,6 +37,7 @@ public class Payment {
     private String currency = "INR";
 
     // 4. STATUS (Jaise tune socha tha: PENDING, SUCCESS, FAILED)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status paymentStatus;
 

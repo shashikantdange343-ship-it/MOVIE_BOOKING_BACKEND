@@ -8,4 +8,7 @@ import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
+    @EntityGraph(attributePaths = {"movieDetails"})
+    Optional<Movie> findById(Long movieId);
+
 }

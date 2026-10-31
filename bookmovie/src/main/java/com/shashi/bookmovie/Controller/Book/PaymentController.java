@@ -1,5 +1,6 @@
 package com.shashi.bookmovie.Controller.Book;
 
+import com.shashi.bookmovie.DTOs.BookingDTOs.PaymentDTOs;
 import com.shashi.bookmovie.Services.Book.PaymentService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
@@ -21,10 +22,10 @@ public class PaymentController {
 
 
     @PostMapping("/webhook")
-    public ResponseEntity<String> handleStripeWebhook(
+    public ResponseEntity<PaymentDTOs.PaymentResponseDTO> handleStripeWebhook(
             @RequestBody String payload,
             @RequestHeader("Stripe-Signature") String sigHeader) {
 
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok(paymentService.handlePayments(payload, sigHeader));
     }
 }

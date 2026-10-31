@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,20 +42,22 @@ public class BookingServicesImpl implements BookingService{
 
             Booking newBooking = new Booking();
 
-            BigDecimal seatsTotalAmount = seatsService.handleSeatBookRequest(seats);
-
             ShowTime showTime = showTimeService.getShowTime(seats.showTimeId());
 
             User user = userService.getUser(userName);
 
-        PaymentIntent intent = null;
+            newBooking.setMovie(showTime.getMovie());
+
+            BigDecimal seatsTotalAmount = seatsService.handleSeatBookRequest(seats , newBooking);
+
+            PaymentIntent intent = null;
             try {
              intent = paymentService.createPaymentIntent(seatsTotalAmount);
             } catch (Exception e) {
                 throw new CustomException("Error creating Payment Intent !" + e.getMessage());
             }
 
-            newBooking.setMovie(showTime.getMovie());
+
             newBooking.setSeats(seatsService.getAllSeats(seats.seats()));
             newBooking.setShowTime(showTime);
             newBooking.setStatus(Status.PENDING);
@@ -73,5 +76,19 @@ public class BookingServicesImpl implements BookingService{
     @Override
     public Optional<List<Booking>> getBookingOfShowTime(Long showTimeId) {
         return bookingRepository.findByShowTimeId(showTimeId);
+    }
+
+    @Override//FOR EXPIRED BOOKING
+    public List<Booking> saveAllBookings(List<Booking> bookings) {
+        return bookingRepository.saveAll(bookings);
+    }
+
+    @Override//METHOD FOR SCHEDULE FOR CHECKING EXPIRED BOOKINGS IN EVERY MINUTES
+    public List<Booking> getAllExpiredBookings(Status status, LocalDateTime expiredTime) {
+        List<Booking> expiredBookings = bookingRepository.findByStatusAndCreatedAtBefore(status,expiredTime);
+        if (expiredBookings.isEmpty()){
+            System.out.println("No Pending Bookings !");
+        }
+        return expiredBookings;
     }
 }

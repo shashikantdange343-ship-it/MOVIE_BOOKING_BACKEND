@@ -80,7 +80,7 @@ public class SeatServiceImpl implements SeatsService {
     }
 
     @Override
-    public BigDecimal handleSeatBookRequest(SeatDTOs.BookSeatsDTO seats) {
+    public BigDecimal handleSeatBookRequest(SeatDTOs.BookSeatsDTO seats , Booking booking) {
 
         BigDecimal totalAmount = BigDecimal.valueOf(0);
            for (SeatDTOs.SeatBookRequestDTO seat1 : seats.seats()){
@@ -89,6 +89,7 @@ public class SeatServiceImpl implements SeatsService {
                    throw new CustomException("Seat is Not Available ! " + seat1.seatId() + seat1.seatId() );
                }
                entitySeats.setIsAvailable(false);
+               entitySeats.setBooking(booking);
                seatsRepository.save(entitySeats);
                totalAmount = totalAmount.add(entitySeats.getPrice());
            }

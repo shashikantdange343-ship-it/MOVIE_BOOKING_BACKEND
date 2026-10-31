@@ -2,6 +2,7 @@ package com.shashi.bookmovie.Services.Show;
 
 import com.shashi.bookmovie.DTOs.ResponseMessageDTO;
 import com.shashi.bookmovie.DTOs.ShowDTOs.SeatDTOs;
+import com.shashi.bookmovie.Entity.Book.Booking;
 import com.shashi.bookmovie.Entity.Show.Seats;
 
 import java.math.BigDecimal;
@@ -19,7 +20,7 @@ public interface SeatsService {
 
     SeatDTOs.SeatDTO handleShowTimeSeats(Long showTimeId);
 
-    BigDecimal handleSeatBookRequest(SeatDTOs.BookSeatsDTO seats);
+    BigDecimal handleSeatBookRequest(SeatDTOs.BookSeatsDTO seats , Booking booking);
 
     void saveAllSeats(List<Seats> seats);
 

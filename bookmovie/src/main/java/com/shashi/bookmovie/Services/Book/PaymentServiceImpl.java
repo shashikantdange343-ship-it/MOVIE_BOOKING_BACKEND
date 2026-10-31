@@ -15,9 +15,12 @@ import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.Refund;
 import com.stripe.net.Webhook;
 import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.RefundCreateParams;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -121,6 +124,7 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
+    @Transactional
     public PaymentDTOs.PaymentResponseDTO handlePaymentFailure(PaymentIntent failedIntent) {
 
         Payment payment = getPayment(failedIntent.getId());
@@ -144,6 +148,7 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
+    @Transactional
     public PaymentDTOs.PaymentResponseDTO handlePaymentSuccess(PaymentIntent paymentIntent) {
 
         Payment payment = getPayment(paymentIntent.getId());
@@ -151,7 +156,7 @@ public class PaymentServiceImpl implements PaymentService{
         Booking booking = payment.getBooking();
 
         if (booking.getStatus() == Status.FAILED) {
-            System.out.println("Late Payment aayi hai! Seats free ho chuki hain, Initiating Auto-Refund...");
+            System.out.println("❌ Late Payment aayi hai! Seats free ho chuki hain, Initiating Auto-Refund...");
 
             try {
                 // User ko uske paise wapas bhej do

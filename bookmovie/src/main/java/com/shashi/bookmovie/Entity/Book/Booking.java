@@ -27,6 +27,7 @@ public class Booking {
     @Column
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     BigDecimal totalAmount;
