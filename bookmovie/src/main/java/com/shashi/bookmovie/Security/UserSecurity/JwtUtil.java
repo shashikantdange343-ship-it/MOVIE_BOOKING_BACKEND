@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.io.Decoders;
@@ -18,7 +19,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private static final String secreteKey = "TXlTdXBlclNlY3JldEtleUZvclByZW1pdW1FY29tbWVyY2VBcHBXaGljaE5lZWRzVG9CZVZlcnlMb25nMG5ld09uZVN0YXJ0ZWQ3LDEwLDIwMjY=";
+    @Value("${user.auth.key}")
+    private String secreteKey;
 
     public String generateToken(UserDetails userDetails){
         Map<String , Object> claims = new HashMap<>();

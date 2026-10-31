@@ -21,12 +21,12 @@ public class SeatUnlockScheduler {
     private final BookingService bookingService;
 
     // fixedRate = 60000 = 1 minute
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 60000 * 2)
     @Transactional
     public void unlockExpiredSeats() {
 
         //for testing set 1 minute
-        LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(1);
+        LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(10);
 
         // LIST OF EXPIRED BOOKINGS
         List<Booking> expiredBookings = bookingService.getAllExpiredBookings(Status.PENDING , tenMinutesAgo);
