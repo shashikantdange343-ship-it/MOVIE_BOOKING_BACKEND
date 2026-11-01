@@ -14,4 +14,10 @@ public interface MovieService {
 
     MovieDTOs.OneMoviePageDTO handleOneMoviePageRequest(Long movieId);
 
+    Page<MovieDTOs.MovieDTO> handleGetMoviesByCategory(int p , Long categoryId);
+
+    Page<MovieDTOs.MovieDTO> handleGetMoviesByTheatre(int p, Long theatreId);
+
+    Page<MovieDTOs.MovieDTO> handleSearchMovie(int p, String movieName);
+
 }

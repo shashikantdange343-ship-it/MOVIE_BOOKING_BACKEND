@@ -21,6 +21,15 @@ public class TheatreServiceImpl implements TheatreService {
 
     private final ShowClassConverter showClassConverter;
 
+    @Override
+    public Theatre getTheatre(Long theatreId) {
+       Optional<Theatre> optionalTheatre = theatreRepository.findById(theatreId);
+       if (optionalTheatre.isEmpty()){
+           throw new ResourceNotFoundException("Theatre Not Found ! ");
+       }
+        return optionalTheatre.get();
+    }
+
     @Override//PAGE OF THEATRE TO DESIDE MOVIE ON THE BASE OF THEATRE
     public Page<Theatre> getAllTheatres(int p) {
 
@@ -41,14 +50,23 @@ public class TheatreServiceImpl implements TheatreService {
 
     @Override//CONVERTING LIST OF THEATRE TO LIST OF THEATRE DTO
     public List<TheatreDTOs.TheatreDTO> handleGetTheatresOfMovie(Long movieId) {
-
         return getOneMovieTheatres(movieId).stream().map(showClassConverter::theatreDTO).toList();
     }
 
     @Override//CONVERTING PAGE OF THEATRE INTO PAGE OF THEATRE DTO
     public Page<TheatreDTOs.TheatreDTO> handleGetAllTheatres(int p) {
-
         return getAllTheatres(p).map(showClassConverter::theatreDTO);
+    }
+
+    @Override
+    public Page<TheatreDTOs.TheatreDTO> handleSearchTheatre(int p, String theatreName) {
+        Pageable theatrePage = PageRequest.of(p , 12 );
+        return theatreRepository.findTheatresByName(theatreName,theatrePage).map(showClassConverter::theatreDTO);
+    }
+
+    @Override
+    public TheatreDTOs.TheatreDetailsDTO handleGetTheatreDetails(Long theatreId) {
+        return showClassConverter.theatreDetailsDTO(getTheatre(theatreId));
     }
 
 

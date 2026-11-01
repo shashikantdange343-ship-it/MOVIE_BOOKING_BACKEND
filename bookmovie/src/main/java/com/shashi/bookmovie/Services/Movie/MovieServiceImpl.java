@@ -39,7 +39,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override//CONVERTED INTO MOVIE DTO
     public Page<MovieDTOs.MovieDTO> handleGetAllMovieRequest(int p) {
-        return  getAllMovies(p).map(movieClassConverter::movieDTO);
+        return getAllMovies(p).map(movieClassConverter::movieDTO);
     }
 
 
@@ -60,5 +60,22 @@ public class MovieServiceImpl implements MovieService {
         return new MovieDTOs.OneMoviePageDTO(movieClassConverter.movieDTO(movie),theatreDTOS);
     }
 
+    @Override
+    public Page<MovieDTOs.MovieDTO> handleGetMoviesByCategory(int p, Long categoryId) {
+        Pageable moviePage = PageRequest.of(p,12);
+        return movieRepository.findByCategoryId(categoryId, moviePage).map(movieClassConverter::movieDTO);
+    }
+
+    @Override
+    public Page<MovieDTOs.MovieDTO> handleGetMoviesByTheatre(int p, Long theatreId) {
+        Pageable moviePage = PageRequest.of(p,12);
+        return movieRepository.findByTheatresId(theatreId, moviePage).map(movieClassConverter::movieDTO);
+    }
+
+    @Override
+    public Page<MovieDTOs.MovieDTO> handleSearchMovie(int p, String movieName) {
+        Pageable moviePage = PageRequest.of(p,12);
+        return movieRepository.findMoviesByName(movieName , moviePage).map(movieClassConverter::movieDTO);
+    }
 
 }

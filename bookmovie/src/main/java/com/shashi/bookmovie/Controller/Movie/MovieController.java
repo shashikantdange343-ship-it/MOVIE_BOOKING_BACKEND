@@ -25,4 +25,28 @@ public class MovieController {
         return ResponseEntity.ok(movieService.handleOneMoviePageRequest(movieId));
     }
 
+    @GetMapping("/category")
+    public ResponseEntity<Page<MovieDTOs.MovieDTO>> getMoviesByCategory(
+            @RequestParam Long id ,
+            @RequestParam int p
+    ){
+        return ResponseEntity.ok(movieService.handleGetMoviesByCategory(p,id));
+    }
+
+    @GetMapping("/theatre")
+    public ResponseEntity<Page<MovieDTOs.MovieDTO>> getMoviesByTheatre(
+            @RequestParam Long id ,
+            @RequestParam int p
+    ){
+        return ResponseEntity.ok(movieService.handleGetMoviesByTheatre(p,id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<MovieDTOs.MovieDTO>> searchMovies(
+            @RequestParam String movieName,
+            @RequestParam int p
+    ){
+        return ResponseEntity.ok(movieService.handleSearchMovie(p,movieName));
+    }
+
 }

@@ -27,5 +27,15 @@ public class TheatreController {
        return ResponseEntity.ok(theatreService.handleGetTheatresOfMovie(movieId));
     }
 
+    @GetMapping("/details")
+    public ResponseEntity<TheatreDTOs.TheatreDetailsDTO> getTheatreDetails(@RequestParam Long theatreId ){
+        return ResponseEntity.ok(theatreService.handleGetTheatreDetails(theatreId));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<TheatreDTOs.TheatreDTO>> searchTheatres(@RequestParam String theatreName,int p ){
+        return ResponseEntity.ok(theatreService.handleSearchTheatre(p, theatreName));
+    }
+
 
 }

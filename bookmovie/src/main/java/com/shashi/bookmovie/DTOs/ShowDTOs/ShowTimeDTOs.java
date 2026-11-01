@@ -14,6 +14,8 @@ public class ShowTimeDTOs {
 
             String movieName,
 
+            String movieImageUrl,
+
             Integer totalAvailableSeats
 
     ){}

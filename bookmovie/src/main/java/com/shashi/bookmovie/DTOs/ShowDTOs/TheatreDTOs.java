@@ -11,8 +11,14 @@ public class TheatreDTOs {
 
             String theatreName,
 
-            List<ShowTimeDTOs.ShowTimesDTO> showTimes
+            String theatreImage,
 
+            String theatreLocation
+
+    ){}
+
+    public record TheatreDetailsDTO(
+            List<ShowTimeDTOs.ShowTimesDTO> showTimes
     ){}
 
 }

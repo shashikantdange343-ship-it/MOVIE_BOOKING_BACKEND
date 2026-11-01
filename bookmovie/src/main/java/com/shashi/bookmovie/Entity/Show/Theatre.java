@@ -27,6 +27,10 @@ public class Theatre {
 
     private String theatreName;
 
+    private String theatreImageUrl;
+
+    private String location;
+
     @ManyToMany
     @JoinTable(
             name = "movie_theatre",

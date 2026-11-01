@@ -17,6 +17,7 @@ public class ShowClassConverter {
                 showTime.getId(),
                 showTime.getShowTime(),
                 showTime.getMovie().getMovieName(),
+                showTime.getMovie().getMovieImageUrl(),
                 showTime.getAvailableSeats()
         );
     }
@@ -25,6 +26,13 @@ public class ShowClassConverter {
         return new TheatreDTOs.TheatreDTO(
                 theatre.getId(),
                 theatre.getTheatreName(),
+                theatre.getTheatreImageUrl(),
+                theatre.getLocation()
+        );
+    }
+
+    public TheatreDTOs.TheatreDetailsDTO theatreDetailsDTO(Theatre theatre){
+        return new TheatreDTOs.TheatreDetailsDTO(
                 theatre.getShowTime().stream().map(this::showTimesDTO).toList()
         );
     }

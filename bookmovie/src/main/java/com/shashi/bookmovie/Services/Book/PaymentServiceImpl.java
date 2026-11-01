@@ -12,6 +12,7 @@ import com.shashi.bookmovie.Repository.Book.BookingRepository;
 import com.shashi.bookmovie.Repository.Book.PaymentRepository;
 import com.shashi.bookmovie.Services.Show.SeatsService;
 import com.stripe.Stripe;
+import com.stripe.exception.EventDataObjectDeserializationException;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.PaymentIntent;
@@ -84,6 +85,7 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
+    @Transactional
     public PaymentDTOs.PaymentResponseDTO handlePayments(String payload, String sigHeader) {
         Event event = null;
 
@@ -96,8 +98,18 @@ public class PaymentServiceImpl implements PaymentService{
         }
 
         if (event.getType().equals("payment_intent.succeeded")) {
+            PaymentIntent paymentIntent = null;
 
-            PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject().get();
+            if (event.getDataObjectDeserializer().getObject().isPresent()) {
+                paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject().get();
+            } else {
+                // 2. Agar API version mismatch ki wajah se nahi hua, toh "Unsafe" tarike se nikal lo
+                try {
+                    paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().deserializeUnsafe();
+                } catch (EventDataObjectDeserializationException e) {
+                    e.printStackTrace();
+                }
+            }
             System.out.println("✅ Payment Succeeded for Intent ID: " + paymentIntent.getId());
 
             return handlePaymentSuccess(paymentIntent);
@@ -124,7 +136,6 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    @Transactional
     public PaymentDTOs.PaymentResponseDTO handlePaymentFailure(PaymentIntent failedIntent) {
 
         Payment payment = getPayment(failedIntent.getId());
@@ -148,7 +159,6 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    @Transactional
     public PaymentDTOs.PaymentResponseDTO handlePaymentSuccess(PaymentIntent paymentIntent) {
 
         Payment payment = getPayment(paymentIntent.getId());

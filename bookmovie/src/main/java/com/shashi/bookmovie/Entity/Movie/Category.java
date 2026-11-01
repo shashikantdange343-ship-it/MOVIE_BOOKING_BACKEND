@@ -21,7 +21,7 @@ public class Category {
     @Column
     private Long id;
 
-    private String category;
+    private String categoryName;
 
     @ManyToMany(mappedBy = "category")
     private List<Movie> movie;

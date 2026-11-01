@@ -1,6 +1,7 @@
 package com.shashi.bookmovie.DTOs.MovieDTOs;
 
 import com.shashi.bookmovie.DTOs.ShowDTOs.TheatreDTOs;
+import com.shashi.bookmovie.Entity.Movie.Category;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +21,9 @@ public class MovieDTOs {
 
             String description,
 
-            LocalDateTime releasedDate
+            LocalDateTime releasedDate,
+
+            List<CategoryDTOs.CategoryDTO> category
 
     ) {}
 
